@@ -16,6 +16,23 @@ app.use(cors({
 
 app.use(express.json());
 
+let paymentStatus = 'unpaid'; // Nilai awal default
+
+app.get('/payment-status', (req, res) => {
+  res.json({ paymentStatus });
+});
+
+app.post('/update-payment-status', (req, res) => {
+  const { newStatus } = req.body;
+
+  if (newStatus === 'paid' || newStatus === 'unpaid') {
+    paymentStatus = newStatus;
+    res.json({ success: true, paymentStatus });
+  } else {
+    res.json({ success: false, message: 'Invalid payment status' });
+  }
+});
+
 app.post('/forward-request', async (req, res) => {
     try {
         // Ambil token dari Firebase Realtime Database
